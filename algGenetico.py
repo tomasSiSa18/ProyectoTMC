@@ -1,7 +1,7 @@
 import random
 
 #Nint = input("Ingrese el número que desea factorizar: ")
-Nint = 3127
+Nint = 171675175571
 N = bin(Nint)[2:]
 
 def cromosoma(individuo: str) -> bool:
@@ -105,7 +105,7 @@ def aptitud(individuo: str):
 
 def algoritmo():
     
-    tamPoblacion = 100
+    tamPoblacion = 100000
     
     print("== Creando la población ==")
     
@@ -116,7 +116,7 @@ def algoritmo():
     for ind in poblacionInicial:
         print(ind + " -- " + str(int(ind, 2)) + " -- " + str(aptitud(ind)))
         
-    G = 10
+    G = 100000
     poblacion = poblacionInicial
     
     for g in range(0, G):        
@@ -150,11 +150,13 @@ def algoritmo():
         
         poblacion = pobSeleccionadaSigGen
         
-    print("La población Final es:")
-    for ind in poblacion:
-        print(ind + " -- " + str(int(ind, 2)) + " -- " + str(aptitud(ind)))    
+    #print("La población Final es:")
+    #for ind in poblacion:
+    #    print(ind + " -- " + str(int(ind, 2)) + " -- " + str(aptitud(ind)))    
         
-    return int(poblacion[0], 2)
+    return poblacion[0]
     
-numero = algoritmo()    
+numeroBin = algoritmo()
+numero = int(numeroBin, 2) 
+print(f"El mejor individuo fue: {numeroBin}")   
 print(f"El resultado del algoritmo es: p = {numero} y q ={round(Nint/numero)}")  
