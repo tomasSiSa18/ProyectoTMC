@@ -11,10 +11,10 @@ def cromosoma(individuo: str) -> bool:
     if(individuo[0] != "1"):
         esIndividuo = False
     
-    if(len(individuo) > len(N)/2 and int(N, 2)%2 == 0):
+    if(round(len(individuo)) != round(len(N)/2) and int(N, 2)%2 == 0):
         esIndividuo = False
         
-    if(len(individuo) > (len(N)+1)/2 and int(N, 2)%2 != 0):
+    if(round(len(individuo)) != round((len(N)+1)/2) and int(N, 2)%2 != 0):
         esIndividuo = False
         
     return esIndividuo
@@ -73,6 +73,7 @@ def cruce(poblacion: list, p: int) -> list:
     return poblacionCruzada
 
 def mutacion(poblacion: list, p: int) -> list:
+    
     poblacionMutada = []
     
     for i in range(0, len(poblacion)):
@@ -90,6 +91,8 @@ def mutacion(poblacion: list, p: int) -> list:
         if(r <= p and cromosoma(indMutado)):
             poblacionMutada.append(indMutado)
             
+    return poblacionMutada
+            
 def aptitud(individuo: str):
     
     p = int(individuo, 2)
@@ -102,7 +105,7 @@ def aptitud(individuo: str):
 
 def algoritmo():
     
-    tamPoblacion = 10
+    tamPoblacion = 100
     
     print("== Creando la población ==")
     
@@ -118,28 +121,40 @@ def algoritmo():
     
     for g in range(0, G):        
 
+        #Organizar por aptitudes
         poblacion.sort(key=aptitud)
-        
-        
-            
+
+        #Seleccionar el mejor 50% de la población
         pobSeleccionada = poblacion[0: round(len(poblacion)/2)]
         
+        #Cruzar la poblacion
         pobCruzada = cruce(pobSeleccionada, 80)
         
-        pobSeleccionada.extend(pobCruzada)
+        if(len(pobCruzada) > 0):
+            poblacion.extend(pobCruzada)
         
+        #Mutar la población
         pobMutada = mutacion(pobSeleccionada, 10)
         
-        pobSeleccionada.extend(pobMutada)
+        if(len(pobMutada) > 0):
+            poblacion.extend(pobMutada)
         
-        pobSeleccionada.sort(key=aptitud)
+        #Organizar y seleccionar los que siguen a la siguiente generación
+        poblacion.sort(key=aptitud)
         
-        pobSeleccionadaSigGen = pobSeleccionada[0: tamPoblacion]
+        pobSeleccionadaSigGen = poblacion[0: tamPoblacion]
+        
+        #print(f"La población de la generacion {g + 1} es:")
+        #for ind in pobSeleccionadaSigGen:
+        #    print(ind + " -- " + str(int(ind, 2)) + " -- " + str(aptitud(ind)))    
         
         poblacion = pobSeleccionadaSigGen
         
+    print("La población Final es:")
+    for ind in poblacion:
+        print(ind + " -- " + str(int(ind, 2)) + " -- " + str(aptitud(ind)))    
         
+    return int(poblacion[0], 2)
     
-    
-    
-algoritmo()      
+numero = algoritmo()    
+print(f"El resultado del algoritmo es: p = {numero} y q ={round(Nint/numero)}")  
